@@ -1,3 +1,3 @@
 # README
 
-Code and data to generate the figure from: 
+Code and data to generate the figures from: 
