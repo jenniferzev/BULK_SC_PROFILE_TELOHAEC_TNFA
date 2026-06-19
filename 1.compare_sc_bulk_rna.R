@@ -56,37 +56,54 @@ a <- venn.diagram(
 ## DIFFERENTIAL EXPRESSION ANALYSIS LOG10FC COMPARISON
 deg_compare_plot <- function(time){
   if(time == "4hr_0hr"){
-    rna_deg_results_col <- "log10FC_4hr_0hr"
-    lalonde_rna_deseq_col <- "LFC_NT_4h"
+    rna_deg_results_col <- c("log10FC_4hr_0hr","deg_4hr_0hr")
+    lalonde_rna_deseq_col <- c("LFC_NT_4h","deg_NT_4h")
   }else if(time == "24hr_0hr"){
-    rna_deg_results_col <- "log10FC_24hr_0hr"
-    lalonde_rna_deseq_col <- "LFC_NT_24h"
+    rna_deg_results_col <- c("log10FC_24hr_0hr","deg_24hr_0hr")
+    lalonde_rna_deseq_col <- c("LFC_NT_24h","deg_NT_24h")
   }else if(time == "24hr_4hr" ){
-    rna_deg_results_col <- "log10FC_24hr_4hr"
-    lalonde_rna_deseq_col <- "LFC_4h_24h"
+    rna_deg_results_col <- c("log10FC_24hr_4hr","deg_24hr_4hr")
+    lalonde_rna_deseq_col <- c("LFC_4h_24h","deg_4h_24h")
   }
 
-  deg_plot_data <- merge(rna_deg_results[,c("gene",rna_deg_results_col)], lalonde_rna_deseq[,c("gene_name",lalonde_rna_deseq_col )], by.x="gene", by.y="gene_name") #only compare genes that are in both datasets
-  colnames(deg_plot_data) <- c("gene","LFC_scRNA_seq","LFC_bulk_RNAseq")
+  deg_plot_data <- merge(rna_deg_results[,c("gene",rna_deg_results_col)], lalonde_rna_deseq[,c("gene_name",lalonde_rna_deseq_col)], by.x="gene", by.y="gene_name") #only compare genes that are in both datasets
+  colnames(deg_plot_data) <- c("gene","LFC_scRNA_seq","sc_deg","LFC_bulk_RNAseq","bulk_deg")
+  deg_plot_data$deg_category <- ifelse(deg_plot_data$sc_deg == 1 & deg_plot_data$bulk_deg == 1,"both",
+                                    ifelse(deg_plot_data$sc_deg == 1, "sc",
+                                    ifelse(deg_plot_data$bulk_deg == 1, "bulk","none")))
+  deg_plot_data$deg_category <- factor( deg_plot_data$deg_category, levels = c("none", "bulk", "sc","both"))
+                                  
 
   model <- lm(LFC_scRNA_seq ~ LFC_bulk_RNAseq, data = deg_plot_data)
   slope <- coef(model)[2]
 
-  ggplot(deg_plot_data, aes(x = LFC_scRNA_seq, y = LFC_bulk_RNAseq)) +
-  geom_point_rast(size = 2, alpha = 0.7, color="blue") +
+  ggplot(deg_plot_data[order(deg_plot_data$deg_category),], aes(x = LFC_scRNA_seq, y = LFC_bulk_RNAseq,color=deg_category)) +
+  geom_point_rast(
+    data = subset(deg_plot_data, deg_category == "none"),
+    aes(LFC_scRNA_seq, LFC_bulk_RNAseq),
+    color = "gray",
+    alpha = 1,
+    size = 0.5
+  ) +
+  geom_point_rast(
+    data = subset(deg_plot_data, deg_category != "none"),
+    aes(LFC_scRNA_seq, LFC_bulk_RNAseq,
+        color = deg_category),
+    alpha = 0.3,
+    size = 0.8
+  )+
   geom_smooth(method = "lm", color = "black", linetype = "dashed") +
-
+  geom_abline(intercept = 0, slope = 1, color="red")
   labs(
        x = "scRNAseq LFC",
        y = "bulk RNAseq LFC",
        ) +
   theme_classic()
   ggsave(paste("figures/compare_sc_bulk_rna/lfc_compare_plot_",time,".svg",sep=""),device = "svg", width = 6, height = 4, dpi = 300)
-
   deg_plot_data <- deg_plot_data[complete.cases(deg_plot_data[, c("LFC_scRNA_seq", "LFC_bulk_RNAseq")]), ]
   spearman_cor <- cor.test(deg_plot_data[["LFC_scRNA_seq"]], deg_plot_data[["LFC_bulk_RNAseq"]], method = "spearman",use = "pairwise.complete.obs")
   pearson_cor<- cor.test(deg_plot_data[["LFC_scRNA_seq"]], deg_plot_data[["LFC_bulk_RNAseq"]], method = "pearson",use = "pairwise.complete.obs")
-  correlation_df <- data.frame(
+ correlation_df <- data.frame(
   spearman_cor = as.numeric(spearman_cor$estimate),
   pearson_cor = as.numeric(pearson_cor$estimate),
   spearman_pval = format.pval(spearman_cor$p.value, digits = 3, eps = .Machine$double.eps),

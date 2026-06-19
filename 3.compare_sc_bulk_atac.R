@@ -89,36 +89,71 @@ load(file="data/compare_sc_bulk_atac/sc_telohaec_tnfa_dop_results_26nov25.Rdata"
 
 lalonde_atac_deseq <- read.table(file="data/compare_sc_bulk_atac/atacpeaks_DE_LFC.txt",header=TRUE)
 lalonde_atac_deseq$peak_id <- paste(lalonde_atac_deseq$chr,lalonde_atac_deseq$start,lalonde_atac_deseq$stop, sep="_")
+lalonde_atac_deseq$dop_NT_4h <- ifelse(abs(lalonde_atac_deseq$log10FC_wt_4h) > 0.3 & lalonde_atac_deseq$padj < 0.001,1,0)
+lalonde_atac_deseq$dop_NT_24h <- ifelse(abs(lalonde_atac_deseq$log10FC_wt_24h) > 0.3 & lalonde_atac_deseq$padj < 0.001,1,0)
+lalonde_atac_deseq$dop_4h_24h <- ifelse(abs(lalonde_atac_deseq$log10FC_4h_24h) > 0.3 & lalonde_atac_deseq$padj < 0.001,1,0)
+lalonde_atac_deseq$dop <- ifelse(lalonde_atac_deseq$dop_NT_4h == 1 | lalonde_atac_deseq$dop_NT_24h == 1 | lalonde_atac_deseq$dop_4h_24h ==1,1,0)
+sum(lalonde_atac_deseq$dop) #3138
 
 colnames(atac_dop_results) <- paste("sc_",colnames(atac_dop_results),sep="")
-atac_peak_pairs <- merge(atac_peak_pairs,atac_dop_results[,c("sc_log10FC_4hr_0hr","sc_log10FC_24hr_0hr","sc_log10FC_24hr_4hr","sc_peak")], by.x="sc_id_hg38", by.y="sc_peak", all.x=TRUE)
-atac_peak_pairs <- merge(atac_peak_pairs,lalonde_atac_deseq[,c("log10FC_wt_4h","log10FC_wt_24h","log10FC_4h_24h","peak_id")], by.x="bulk_id_hg19", by.y="peak_id", all.x=TRUE)
+
+atac_peak_pairs <- merge(atac_peak_pairs,atac_dop_results[,c("sc_log10FC_4hr_0hr","sc_log10FC_24hr_0hr","sc_log10FC_24hr_4hr","sc_peak","sc_dop_4hr_0hr","sc_dop_24hr_0hr","sc_dop_24hr_4hr")], by.x="sc_id_hg38", by.y="sc_peak", all.x=TRUE)
+atac_peak_pairs <- merge(atac_peak_pairs,lalonde_atac_deseq[,c("log10FC_wt_4h","log10FC_wt_24h","log10FC_4h_24h","peak_id","dop_NT_4h","dop_NT_24h","dop_4h_24h")], by.x="bulk_id_hg19", by.y="peak_id", all.x=TRUE)
+
 
 dop_compare_plot <- function(time){
   if(time == "4hr_0hr"){
-    select_col <- c("sc_log10FC_4hr_0hr","log10FC_wt_4h")
+    select_col <- c("sc_log10FC_4hr_0hr","log10FC_wt_4h","sc_dop_4hr_0hr","dop_NT_4h")
   }else if(time == "24hr_0hr"){
-    select_col <- c("sc_log10FC_24hr_0hr","log10FC_wt_24h")
+    select_col <- c("sc_log10FC_24hr_0hr","log10FC_wt_24h","sc_dop_24hr_0hr","dop_NT_24h")
   }else if(time == "24hr_4hr" ){
-    select_col <- c("sc_log10FC_24hr_4hr","log10FC_4h_24h")
+    select_col <- c("sc_log10FC_24hr_4hr","log10FC_4h_24h","sc_dop_24hr_4hr","dop_4h_24h")
   }
 
   dop_plot_data <-atac_peak_pairs[,select_col]
-  colnames(dop_plot_data) <- c("LFC_scATAC_seq","LFC_bulk_ATACseq")
+  colnames(dop_plot_data) <- c("LFC_scATAC_seq","LFC_bulk_ATACseq","sc_dop","bulk_dop")
+  dop_plot_data$dop_category <- ifelse(dop_plot_data$sc_dop == 1 & dop_plot_data$bulk_dop == 1,"both",
+                                    ifelse(dop_plot_data$sc_dop == 1, "sc",
+                                    ifelse(dop_plot_data$bulk_dop == 1, "bulk","none")))
+  dop_plot_data$dop_category <- factor( dop_plot_data$dop_category, levels = c("none", "bulk", "sc","both"))
+                  
 
   model <- lm(LFC_scATAC_seq ~ LFC_bulk_ATACseq, data = dop_plot_data)
   slope <- coef(model)[2]
 
-  ggplot(dop_plot_data, aes(x = LFC_scATAC_seq, y = LFC_bulk_ATACseq)) +
-  geom_point_rast(size = 2, alpha = 0.7, color="blue") + 
+  ggplot(dop_plot_data, aes(x = LFC_scATAC_seq, y = LFC_bulk_ATACseq,color=dop_category)) +
+  geom_point_rast(
+    data = subset(dop_plot_data, dop_category == "none"),
+    aes(x = LFC_scATAC_seq, y = LFC_bulk_ATACseq),
+    color = "gray",
+    alpha = 1,
+    size = 0.5
+  ) +
+  geom_point_rast(
+    data = subset(dop_plot_data, dop_category != "none"),
+    aes(x = LFC_scATAC_seq, y = LFC_bulk_ATACseq,
+        color = dop_category),
+    alpha = 0.3,
+    size = 0.8
+  )+
   geom_smooth(method = "lm", color = "black", linetype = "dashed") +
+  geom_abline(intercept = 0, slope = 1, color="red")
   labs(
        x = "scATACseq LFC",
        y = "bulk ATACseq LFC",
        ) +
-
   theme_classic()
   ggsave(paste("figures/compare_sc_bulk_atac/lfc_compare_plot_",time,"_raster.svg",sep=""),device = "svg", width = 6, height = 4, dpi = 300)
+
+
+  dop_plot_data$dop_category <- factor( dop_plot_data$dop_category, levels = c("none", "bulk", "both","sc"))
+
+  ggplot(dop_plot_data[dop_plot_data$dop_category != "none",], aes(x =abs(LFC_scATAC_seq), y = dop_category, fill = dop_category)) +
+  geom_density_ridges() +
+  theme_ridges() + 
+  labs(x="log10FC ; scATACseq ",y="DOP annotation")
+  ggsave(paste("figures/compare_sc_bulk_atac/dop_sc_lfc_ridgeplot_",time,".svg",sep=""),device = "svg", width = 6, height = 4, dpi = 300)
+
 
   dop_plot_data <- dop_plot_data[complete.cases(dop_plot_data[, c("LFC_scATAC_seq", "LFC_bulk_ATACseq")]), ]
   spearman_cor <- cor.test(dop_plot_data[["LFC_scATAC_seq"]], dop_plot_data[["LFC_bulk_ATACseq"]], method = "spearman",use = "pairwise.complete.obs")
@@ -134,108 +169,10 @@ dop_compare_plot <- function(time){
     time, sep = "_"
     )
   return(correlation_df)
+
 }
 
 cor_4hr_0hr <- dop_compare_plot("4hr_0hr") 
 cor_24hr_0hr <- dop_compare_plot("24hr_0hr") 
 cor_24hr_4hr <- dop_compare_plot("24hr_4hr")
 
-
-############################ PART 3
-################################## COMPARE PEAK DOP STATUS (FOR EACH COMPARISON)
-
-# time="dop_4hr_0hr"
-# sc_lfc="log10FC_4hr_0hr"
-# lfc="LFC_NT_4h"
-
-#OR
-
-# time="dop_24hr_0hr"
-# sc_lfc="log10FC_24hr_0hr"
-# lfc="LFC_NT_24h"
-
-#OR
-# time="dop_24hr_4hr"
-# sc_lfc="log10FC_24hr_4hr"
-# lfc="LFC_4h_24h"
-
-
-#filter single cell atac dop
-load(file="data/compare_sc_bulk_atac/sc_telohaec_tnfa_dop_results_26nov25.Rdata")
-filtered_dop <- atac_dop_results[atac_dop_results[[time]] == 1, ]
-
-#dop from the article
-original_lalonde_dop <- read.xlsx("data/compare_sc_bulk_atac/dop_lalonde_2019.xlsx",sheet= 1,startRow = 3)
-original_lalonde_dop$peak_id <- paste(original_lalonde_dop$CHR,original_lalonde_dop$START,original_lalonde_dop$STOP, sep="_")
-lalonde_dop <- original_lalonde_dop[original_lalonde_dop[[lfc]] > 0.3, ]
-
-#overlapping pairs info
-atac_peak_overlap_amount <- read.table(file="data/compare_sc_bulk_atac/atac_peak_overlap_amount.bed")
-colnames(atac_peak_overlap_amount) <- c("bulk_chr_hg38","bulk_start_hg38","bulk_stop_hg38","bulk_id_hg19","sc_chr_hg38","sc_start_hg38","sc_stop_hg38","sc_id_hg38","overlap")
-atac_peak_overlap_amount <- atac_peak_overlap_amount[atac_peak_overlap_amount$overlap >= 250, ]
-atac_peak_pairs <- atac_peak_overlap_amount 
-
-#define dop in the overlapping pairs
-overlapping_dop <- atac_peak_pairs
-overlapping_dop$sc_dop <- ifelse(overlapping_dop$sc_id_hg38 %in% filtered_dop$peak, 1, 0)
-overlapping_dop <- merge(overlapping_dop,atac_dop_results[,c("peak",sc_lfc)],by.x="sc_id_hg38",by.y="peak", all.x=TRUE)
-colnames(overlapping_dop)[which(colnames(overlapping_dop) == sc_lfc)] <- "sc_lfc"
-overlapping_dop$bulk_dop <- ifelse(overlapping_dop$bulk_id_hg19 %in% lalonde_dop$peak_id, 1, 0)
-overlapping_dop <- merge(overlapping_dop,original_lalonde_dop[,c("peak_id",lfc)],by.x="bulk_id_hg19",by.y="peak_id", all.x=TRUE)
-colnames(overlapping_dop)[which(colnames(overlapping_dop) == lfc)] <- "bulk_lfc"
-
-pair_dop_status <- function(sc_dop,bulk_dop){
-  if(sc_dop==1 & bulk_dop==1){
-    return('sc-bulk DOPs')
-  } else if(sc_dop==1 & bulk_dop==0){
-    return('sc-only DOPs')
-  } else if(sc_dop==0 & bulk_dop==1){
-    return('bulk-only DOPs')
-  } else {
-    return('not DOPs')
-  }
-}
-
-
-overlapping_dop$pair_dop_status <- apply(overlapping_dop, 1, function(x) pair_dop_status(x['sc_dop'], x['bulk_dop']))
-overlapping_dop$pair_dop_status <- factor(overlapping_dop$pair_dop_status, levels=c('bulk-only DOPs','not DOPs','sc-bulk DOPs','sc-only DOPs'))
-
-svg(paste("figures/compare_sc_bulk_atac/dop_sc_lfc_ridgeplot_",time,".svg",sep=""))
-ggplot(overlapping_dop[!overlapping_dop$pair_dop_status %in% c("not DOPs"),], aes(x = abs(sc_lfc), y = pair_dop_status, fill = pair_dop_status)) +
-  geom_density_ridges() +
-  theme_ridges() + 
-  labs(x="log10FC ; scATACseq ",y="DOP annotation") +
-  theme_minimal()
-dev.off()
-
-
-upset_plot_input <- data.frame(
-  `sc DOP` = c(1,0,1,0),
-  `bulk DOP` = c(1,0,0,1),
-  `not sc DOP` = c(0,1,0,1),
-  `not bulk DOP` = c(0,1,1,0),
-  count = c(summary(as.factor(overlapping_dop$pair_dop_status))[3],
-            summary(as.factor(overlapping_dop$pair_dop_status))[2],
-            summary(as.factor(overlapping_dop$pair_dop_status))[4],
-            summary(as.factor(overlapping_dop$pair_dop_status))[1])
-)
-upset_plot_input_expanded <- upset_plot_input[rep(1:nrow(upset_plot_input), upset_plot_input$count), -5]
-
-svg(paste("figures/compare_sc_bulk_atac/compare_dop_upset",time,".svg"), width = 14, height = 10)
-ComplexUpset::upset(
-  upset_plot_input_expanded,
-  intersect = c("sc.DOP", "bulk.DOP", "not.sc.DOP", "not.bulk.DOP"),
-  base_annotations = list(
-    'Intersection size' = intersection_size()
-  )
-)+
-  labs(x = "Number of peak pairs")+
-  theme(
-    strip.text.y = element_text(size = 20, face = "bold"),  # Increases set label text
-    axis.text.x = element_blank(),                  # Increases intersection labels
-    axis.text.y = element_text(size = 20),
-    axis.title.x = element_text(size = 20, face = "bold"),
-    axis.title.y = element_text(size = 20, face = "bold"),              # Increases axis titles
-    plot.title = element_text(size = 20, face = "bold")     # If you use ggtitle()
-  )
-dev.off()
