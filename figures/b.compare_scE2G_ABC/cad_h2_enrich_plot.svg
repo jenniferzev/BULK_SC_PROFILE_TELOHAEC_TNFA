@@ -38,29 +38,30 @@
 <polyline points='27.89,343.30 1146.52,343.30 ' style='stroke-width: 0.53; stroke: #EBEBEB; stroke-linecap: butt;' />
 <polyline points='27.89,224.58 1146.52,224.58 ' style='stroke-width: 0.53; stroke: #EBEBEB; stroke-linecap: butt;' />
 <polyline points='27.89,105.87 1146.52,105.87 ' style='stroke-width: 0.53; stroke: #EBEBEB; stroke-linecap: butt;' />
-<polyline points='78.74,545.12 78.74,22.77 ' style='stroke-width: 0.53; stroke: #EBEBEB; stroke-linecap: butt;' />
-<polyline points='369.29,545.12 369.29,22.77 ' style='stroke-width: 0.53; stroke: #EBEBEB; stroke-linecap: butt;' />
-<polyline points='659.84,545.12 659.84,22.77 ' style='stroke-width: 0.53; stroke: #EBEBEB; stroke-linecap: butt;' />
-<polyline points='950.40,545.12 950.40,22.77 ' style='stroke-width: 0.53; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='163.48,545.12 163.48,22.77 ' style='stroke-width: 0.53; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='445.96,545.12 445.96,22.77 ' style='stroke-width: 0.53; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='728.45,545.12 728.45,22.77 ' style='stroke-width: 0.53; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='1010.93,545.12 1010.93,22.77 ' style='stroke-width: 0.53; stroke: #EBEBEB; stroke-linecap: butt;' />
 <polyline points='27.89,521.37 1146.52,521.37 ' style='stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;' />
 <polyline points='27.89,402.66 1146.52,402.66 ' style='stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;' />
 <polyline points='27.89,283.94 1146.52,283.94 ' style='stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;' />
 <polyline points='27.89,165.23 1146.52,165.23 ' style='stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;' />
 <polyline points='27.89,46.51 1146.52,46.51 ' style='stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;' />
-<polyline points='224.01,545.12 224.01,22.77 ' style='stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;' />
-<polyline points='514.57,545.12 514.57,22.77 ' style='stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;' />
-<polyline points='805.12,545.12 805.12,22.77 ' style='stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;' />
-<polyline points='1095.67,545.12 1095.67,22.77 ' style='stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;' />
-<circle cx='452.66' cy='229.70' r='1.95' style='stroke-width: 0.71; fill: #000000;' />
-<circle cx='427.75' cy='106.31' r='1.95' style='stroke-width: 0.71; fill: #000000;' />
-<circle cx='66.09' cy='434.00' r='1.95' style='stroke-width: 0.71; fill: #000000;' />
-<circle cx='490.30' cy='137.93' r='1.95' style='stroke-width: 0.71; fill: #000000;' />
-<circle cx='1064.57' cy='213.41' r='1.95' style='stroke-width: 0.71; fill: #000000;' />
-<text x='452.66' y='221.87' text-anchor='middle' style='font-size: 11.38px; font-family: "Liberation Sans";' textLength='23.41px' lengthAdjust='spacingAndGlyphs'>ABC</text>
-<text x='427.75' y='98.48' text-anchor='middle' style='font-size: 11.38px; font-family: "Liberation Sans";' textLength='34.14px' lengthAdjust='spacingAndGlyphs'>scE2G</text>
-<text x='66.09' y='426.17' text-anchor='middle' style='font-size: 11.38px; font-family: "Liberation Sans";' textLength='50.61px' lengthAdjust='spacingAndGlyphs'>ABC_only</text>
-<text x='490.30' y='130.10' text-anchor='middle' style='font-size: 11.38px; font-family: "Liberation Sans";' textLength='61.34px' lengthAdjust='spacingAndGlyphs'>scE2G_only</text>
-<text x='1064.57' y='205.59' text-anchor='middle' style='font-size: 11.38px; font-family: "Liberation Sans";' textLength='63.88px' lengthAdjust='spacingAndGlyphs'>ABC_scE2G</text>
+<polyline points='304.72,545.12 304.72,22.77 ' style='stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='587.21,545.12 587.21,22.77 ' style='stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;' />
+<polyline points='869.69,545.12 869.69,22.77 ' style='stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;' />
+<circle cx='595.55' cy='229.70' r='1.95' style='stroke-width: 0.71; fill: #000000;' />
+<circle cx='576.18' cy='106.31' r='1.95' style='stroke-width: 0.71; fill: #000000;' />
+<circle cx='294.89' cy='434.00' r='1.95' style='stroke-width: 0.71; fill: #000000;' />
+<circle cx='624.83' cy='137.93' r='1.95' style='stroke-width: 0.71; fill: #000000;' />
+<circle cx='1071.48' cy='213.41' r='1.95' style='stroke-width: 0.71; fill: #000000;' />
+<circle cx='448.74' cy='229.38' r='1.95' style='stroke-width: 0.71; fill: #000000;' />
+<text x='595.55' y='221.87' text-anchor='middle' style='font-size: 11.38px; font-family: "Liberation Sans";' textLength='23.41px' lengthAdjust='spacingAndGlyphs'>ABC</text>
+<text x='576.18' y='98.48' text-anchor='middle' style='font-size: 11.38px; font-family: "Liberation Sans";' textLength='34.14px' lengthAdjust='spacingAndGlyphs'>scE2G</text>
+<text x='294.89' y='426.17' text-anchor='middle' style='font-size: 11.38px; font-family: "Liberation Sans";' textLength='50.61px' lengthAdjust='spacingAndGlyphs'>ABC_only</text>
+<text x='624.83' y='130.10' text-anchor='middle' style='font-size: 11.38px; font-family: "Liberation Sans";' textLength='61.34px' lengthAdjust='spacingAndGlyphs'>scE2G_only</text>
+<text x='1071.48' y='205.59' text-anchor='middle' style='font-size: 11.38px; font-family: "Liberation Sans";' textLength='63.88px' lengthAdjust='spacingAndGlyphs'>ABC_scE2G</text>
+<text x='448.74' y='221.55' text-anchor='middle' style='font-size: 11.38px; font-family: "Liberation Sans";' textLength='132.16px' lengthAdjust='spacingAndGlyphs'>scE2G_only_no_promoter</text>
 <line x1='27.89' y1='366.92' x2='1146.52' y2='366.92' style='stroke-width: 1.07; stroke: #FF0000; stroke-dasharray: 5.69,5.69; stroke-linecap: butt;' />
 <line x1='27.89' y1='229.70' x2='1146.52' y2='229.70' style='stroke-width: 1.07; stroke: #0000FF; stroke-dasharray: 1.42,4.27; stroke-linecap: butt;' />
 </g>
@@ -70,10 +71,9 @@
 <text x='22.96' y='286.97' text-anchor='end' style='font-size: 8.80px;fill: #4D4D4D; font-family: "Liberation Sans";' textLength='4.89px' lengthAdjust='spacingAndGlyphs'>2</text>
 <text x='22.96' y='168.25' text-anchor='end' style='font-size: 8.80px;fill: #4D4D4D; font-family: "Liberation Sans";' textLength='4.89px' lengthAdjust='spacingAndGlyphs'>3</text>
 <text x='22.96' y='49.54' text-anchor='end' style='font-size: 8.80px;fill: #4D4D4D; font-family: "Liberation Sans";' textLength='4.89px' lengthAdjust='spacingAndGlyphs'>4</text>
-<text x='224.01' y='556.10' text-anchor='middle' style='font-size: 8.80px;fill: #4D4D4D; font-family: "Liberation Sans";' textLength='4.89px' lengthAdjust='spacingAndGlyphs'>6</text>
-<text x='514.57' y='556.10' text-anchor='middle' style='font-size: 8.80px;fill: #4D4D4D; font-family: "Liberation Sans";' textLength='4.89px' lengthAdjust='spacingAndGlyphs'>8</text>
-<text x='805.12' y='556.10' text-anchor='middle' style='font-size: 8.80px;fill: #4D4D4D; font-family: "Liberation Sans";' textLength='9.78px' lengthAdjust='spacingAndGlyphs'>10</text>
-<text x='1095.67' y='556.10' text-anchor='middle' style='font-size: 8.80px;fill: #4D4D4D; font-family: "Liberation Sans";' textLength='9.78px' lengthAdjust='spacingAndGlyphs'>12</text>
+<text x='304.72' y='556.10' text-anchor='middle' style='font-size: 8.80px;fill: #4D4D4D; font-family: "Liberation Sans";' textLength='12.22px' lengthAdjust='spacingAndGlyphs'>5.0</text>
+<text x='587.21' y='556.10' text-anchor='middle' style='font-size: 8.80px;fill: #4D4D4D; font-family: "Liberation Sans";' textLength='12.22px' lengthAdjust='spacingAndGlyphs'>7.5</text>
+<text x='869.69' y='556.10' text-anchor='middle' style='font-size: 8.80px;fill: #4D4D4D; font-family: "Liberation Sans";' textLength='17.11px' lengthAdjust='spacingAndGlyphs'>10.0</text>
 <text x='587.21' y='568.24' text-anchor='middle' style='font-size: 11.00px; font-family: "Liberation Sans";' textLength='55.66px' lengthAdjust='spacingAndGlyphs'>Enrichment</text>
 <text transform='translate(13.05,283.94) rotate(-90)' text-anchor='middle' style='font-size: 11.00px; font-family: "Liberation Sans";' textLength='105.81px' lengthAdjust='spacingAndGlyphs'>-log10(Enrichment_p)</text>
 <text x='27.89' y='14.55' style='font-size: 13.20px; font-family: "Liberation Sans";' textLength='43.23px' lengthAdjust='spacingAndGlyphs'>cad_h2</text>

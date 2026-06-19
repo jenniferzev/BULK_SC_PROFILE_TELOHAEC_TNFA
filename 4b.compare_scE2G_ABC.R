@@ -29,7 +29,7 @@ h2_enrichement_figure <- function(h2_results,enrichment_threshold,label){
     geom_hline(yintercept = -log10(enrichment_threshold), color = "blue", linetype = "dotted") +
     theme(plot.background = element_rect(fill = "white", color = NA))+
     coord_cartesian(
-    xlim = c(5, 12),
+    xlim = c(3, 12),
     ylim = c(0, 4)
     )
     #coord_cartesian(clip = "off") 

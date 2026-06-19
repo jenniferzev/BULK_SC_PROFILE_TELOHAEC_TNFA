@@ -173,12 +173,12 @@ dev.off()
 
 #see section OVERLAP REGULATORY REGIONS WITH CAD AND DBP FINEMAPPED VARIANTS in 4a.compare_scE2G_ABC.sh
 
-r_regions <- c('ABC_merged.bed','ABC_only_merged.bed','ABC_scE2G_merged.bed','scE2G_merged.bed','scE2G_only_merged.bed')
+r_regions <- c('ABC_merged.bed','ABC_only_merged.bed','ABC_scE2G_merged.bed','scE2G_merged.bed','scE2G_only_merged.bed',"scE2G_only_no_promoter_merged.bed")
 
 ci_list <- list()
 estimate_list <- list()
 for(r in r_regions){
-  cad_snps_reg_regions <- read.table(paste0("data/compare_scE2G_ABC/overlap_variants/CAD_SNPS_",r))
+  cad_snps_reg_regions <- read.table(paste0("data/a.compare_scE2G_ABC/overlap_variants/CAD_SNPS_",r))
   cad_snps_reg_regions <- cad_snps_reg_regions[,c(1:3,7)]
   colnames(cad_snps_reg_regions) <- c("chr","start","end","snp_pip")
   cad_snps_reg_regions$snp_pip <- as.numeric(gsub(".*>","",cad_snps_reg_regions$snp_pip))
@@ -211,7 +211,7 @@ df <- data.frame(
 )
 
 
-svg("figures/compare_scE2G_ABC/cad_snps_causal_signal_density_CI95.svg")
+svg("figures/a.compare_scE2G_ABC/cad_snps_causal_signal_density_CI95.svg")
 ggplot(df, aes(x = reorder(regions,-csd), y = csd)) +
   geom_bar(stat = "identity", fill = "steelblue") +
   geom_errorbar(aes(ymin = lower, ymax = upper),
@@ -225,12 +225,12 @@ dev.off()
 
 #see section OVERLAP REGULATORY REGIONS WITH CAD AND DBP FINEMAPPED VARIANTS in 4a.compare_scE2G_ABC.sh
 
-r_regions <- c('ABC_merged.bed','ABC_only_merged.bed','ABC_scE2G_merged.bed','scE2G_merged.bed','scE2G_only_merged.bed')
+r_regions <- c('ABC_merged.bed','ABC_only_merged.bed','ABC_scE2G_merged.bed','scE2G_merged.bed','scE2G_only_merged.bed',"scE2G_only_no_promoter_merged.bed")
 
 ci_list <- list()
 estimate_list <- list()
 for(r in r_regions){
-  cad_snps_reg_regions <- read.table(paste0("data/compare_scE2G_ABC/overlap_variants/DBP_SNPS_",r))
+  cad_snps_reg_regions <- read.table(paste0("data/a.compare_scE2G_ABC/overlap_variants/DBP_SNPS_",r))
   cad_snps_reg_regions <- cad_snps_reg_regions[,c(1:3,7)]
   colnames(cad_snps_reg_regions) <- c("chr","start","end","snp_pip")
   cad_snps_reg_regions$snp_pip <- as.numeric(gsub(".*>","",cad_snps_reg_regions$snp_pip))
@@ -261,9 +261,9 @@ df <- data.frame(
   lower   = sapply(ci_list[r_regions], `[`, 1),
   upper   = sapply(ci_list[r_regions], `[`, 2)
 )
-mean(df$csd)#9.008526
+mean(df$csd)
 
-svg("figures/compare_scE2G_ABC/dbp_snps_causal_signal_density_CI95.svg")
+svg("figures/a.compare_scE2G_ABC/dbp_snps_causal_signal_density_CI95.svg")
 ggplot(df, aes(x = reorder(regions,-csd), y = csd)) +
   geom_bar(stat = "identity", fill = "steelblue") +
   geom_errorbar(aes(ymin = lower, ymax = upper),
