@@ -77,3 +77,34 @@ ggplot(pathway_data[pathway_data$Term %in% pathway_bulk_only, ], aes(x = experie
     labs(x = "", y = "Pathway", size = "-Log10 P", color = "-Log10 P") +
     theme_bw()
 ggsave("figures/compare_deg_pathway/pathways_bulk_only.svg")
+
+
+sc_only_deg_pathways_res <- read.table("/home/jzev/projects/def-glettre/jzev/BULK_SC_PROFILE_TELOHAEC_TNFA/data/compare_deg_pathways/sc_only_deg_telohaec_pathway.txt",header=TRUE,sep="\t")
+sc_only_deg_pathways_res <- sc_only_deg_pathways_res[sc_only_deg_pathways_res$PValue < 0.05, c("Term","Count","PValue","Genes","Category")]
+sc_only_deg_pathways_res$ID <- gsub(":.*","",sc_only_deg_pathways_res$Term)
+sc_only_deg_pathways_res$log_pval <- -(log10(sc_only_deg_pathways_res$PValue))
+
+ggplot(sc_only_deg_pathways_res, aes(x = Category, y = Term, size = log_pval, color=log_pval)) +
+    geom_point() +
+    scale_color_gradient(low = "blue", high = "red") +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+    labs(x = "", y = "Pathway", size = "-Log10 P", color = "-Log10 P") +
+    theme_bw()
+ggsave("figures/compare_deg_pathway/pathways_sc_deg_only.svg")
+
+bulk_only_deg_pathways_res <- read.table("/home/jzev/projects/def-glettre/jzev/BULK_SC_PROFILE_TELOHAEC_TNFA/data/compare_deg_pathways/bulk_only_deg_telohaec_pathway.txt",header=TRUE,sep="\t")
+bulk_only_deg_pathways_res <- bulk_only_deg_pathways_res[bulk_only_deg_pathways_res$PValue < 0.05, c("Term","Count","PValue","Genes","Category")]
+bulk_only_deg_pathways_res$ID <- gsub(":.*","",bulk_only_deg_pathways_res$Term)
+bulk_only_deg_pathways_res$log_pval <- -(log10(bulk_only_deg_pathways_res$PValue))
+bulk_only_deg_pathways_res <- bulk_only_deg_pathways_res[order(bulk_only_deg_pathways_res$log_pval,decreasing = TRUE),]
+
+ggplot(bulk_only_deg_pathways_res, aes(x = Category, y = Term, size = log_pval, color=log_pval)) +
+    geom_point() +
+    scale_color_gradient(low = "blue", high = "red") +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+    labs(x = "", y = "Pathway", size = "-Log10 P", color = "-Log10 P") +
+    theme_bw()
+ggsave("figures/compare_deg_pathway/pathways_bulk_deg_only.svg")
+
